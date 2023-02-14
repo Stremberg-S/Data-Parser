@@ -28,9 +28,6 @@ def main(wanted_price, url):
     item = get_item(url)
     if price < wanted_price:
         write_to_file(item + "\t" + str(price) + " €")
-        time.sleep(600)
-    else:
-        time.sleep(600)
 
 
 if __name__ == "__main__":
@@ -41,8 +38,9 @@ if __name__ == "__main__":
                  "https://www.jimms.fi/fi/Product/Show/186256/rog-strix-rtx4080-o16g-gaming/asus-geforce-rtx-4080-rog"
                  "-strix-oc-edition-naytonohjain-16gb-gddr6x")
             main(1599,
-                 "https://www.jimms.fi/fi/Product/Show/187950/gv-n4080aorus-m-16gd/gigabyte-geforce-rtx-4080-aorus-master"
-                 "-naytonohjain-16gb-gddr6x")
+                 "https://www.jimms.fi/fi/Product/Show/187950/gv-n4080aorus-m-16gd/gigabyte-geforce-rtx-4080-aorus"
+                 "-master-naytonohjain-16gb-gddr6x")
+            time.sleep(600)
         except:
             write_to_file("\tSCRIPT STOPPED.. :(")
             break
