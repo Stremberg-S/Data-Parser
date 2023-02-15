@@ -1,12 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import time
-import os
 
 
 def write_to_file(content):
-    desktop = os.path.expanduser("~/Desktop")
-    with open(desktop + "/RTX_4080.txt", "a") as file:
+    with open("/Users/stremberg_s/Desktop/RTX_4080.txt", "a") as file:
         file.write(content + "\n")
 
 
