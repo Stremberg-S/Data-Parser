@@ -34,19 +34,36 @@ async def get_item(url):
         return await write_to_file("\tCan't find the item")
 
 
+async def get_available_status(url):
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                content = await response.text()
+                soup = BeautifulSoup(content, "html.parser")
+                status_element = soup.find("span", class_="availability-text d-flex align-items-center gap-1")
+                if status_element is not None:
+                    status = status_element.get_text(strip=True).replace("fiber_manual_record", "")
+                    return status
+    except ParsingError:
+        return await write_to_file("\tCan't find the status")
+
+
 def discount(old, new):
     x = (old - new) / old * 100
     return round(x, 2)
 
 
-async def main(wanted_price, url):
+async def parse_info(wanted_price, url):
     try:
         price = await get_price(url)
         item = await get_item(url)
+        status = await get_available_status(url)
+
         if price < wanted_price:
             x = discount(wanted_price, price)
-            await write_to_file(item + "\t" +
-                                str(price) + " €" + "\t-" +
-                                str(x) + "%")
+            await write_to_file(item + "\t | " +
+                                str(price) + " €" +
+                                " | -" + str(x) + "%" +
+                                " | " + str(status))
     except ParsingError:
         pass

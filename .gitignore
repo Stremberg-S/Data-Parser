@@ -131,3 +131,6 @@ dmypy.json
 .idea/
 testing.py
 Price_Checker_Main.py
+
+# catalog
+/Catalog/
