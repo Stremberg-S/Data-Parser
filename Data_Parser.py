@@ -7,14 +7,13 @@ import aiohttp
 
 def read_file():
     with open(jimms, "r") as file:
-        content = file.read()
-        return content
+        return file.read()
 
 
 async def write_to_file(content):
     async with aiofiles.open(jimms, "a") as file:
         existing_content = read_file()
-        if content not in existing_content:
+        if content not in existing_content or "SCRIPT" in content:
             await file.write(content + "\n")
 
 
