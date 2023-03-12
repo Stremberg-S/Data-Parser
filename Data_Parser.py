@@ -62,7 +62,7 @@ def discount(old, new):
     return round(x, 2)
 
 
-async def parse_info(wanted_price, url):
+async def parse_data(wanted_price, url):
     try:
         price = await get_price(url)
         item = await get_item(url)

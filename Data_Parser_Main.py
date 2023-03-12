@@ -1,7 +1,4 @@
-from Catalog.Graphic_Cards import *
-from Catalog.Motherboards import *
-from Catalog.Processors import *
-from Catalog.RAM import *
+from Catalog import *
 from datetime import datetime
 import asyncio
 import time
