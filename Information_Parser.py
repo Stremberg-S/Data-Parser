@@ -4,9 +4,17 @@ import aiofiles as aiofiles
 import aiohttp
 
 
+def read_file():
+    with open("/Users/stremberg_s/Desktop/RTX_4080.txt", "r") as file:
+        content = file.read()
+        return content
+
+
 async def write_to_file(content):
     async with aiofiles.open("/Users/stremberg_s/Desktop/RTX_4080.txt", "a") as file:
-        await file.write(content + "\n")
+        existing_content = read_file()
+        if content not in existing_content:
+            await file.write(content + "\n")
 
 
 async def get_price(url):
@@ -63,7 +71,7 @@ async def parse_info(wanted_price, url):
             x = discount(wanted_price, price)
             await write_to_file(item + "\t | " +
                                 str(price) + " €" +
-                                " | -" + str(x) + "%" +
+                                " | -" + str(x) + " %" +
                                 " | " + str(status))
     except ParsingError:
         pass
