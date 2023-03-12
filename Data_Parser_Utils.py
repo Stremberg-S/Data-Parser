@@ -1,4 +1,7 @@
 import aiofiles as aiofiles
+import aiohttp
+from bs4 import BeautifulSoup
+
 from Path import *
 
 
@@ -19,3 +22,10 @@ async def write_to_file(content):
 def discount(old, new):
     x = (old - new) / old * 100
     return round(x, 2)
+
+
+async def fetch_html(url):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            content = await response.text()
+            return BeautifulSoup(content, "html.parser")
