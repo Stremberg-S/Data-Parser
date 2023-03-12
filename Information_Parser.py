@@ -1,3 +1,4 @@
+from Path import *
 from configparser import ParsingError
 from bs4 import BeautifulSoup
 import aiofiles as aiofiles
@@ -5,13 +6,13 @@ import aiohttp
 
 
 def read_file():
-    with open("/Users/stremberg_s/Desktop/RTX_4080.txt", "r") as file:
+    with open(jimms, "r") as file:
         content = file.read()
         return content
 
 
 async def write_to_file(content):
-    async with aiofiles.open("/Users/stremberg_s/Desktop/RTX_4080.txt", "a") as file:
+    async with aiofiles.open(jimms, "a") as file:
         existing_content = read_file()
         if content not in existing_content:
             await file.write(content + "\n")
