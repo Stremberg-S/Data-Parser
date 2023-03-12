@@ -13,11 +13,10 @@ async def get_price(store, url):
 
                 if store == "Jimms":
                     price = soup.find("span", itemprop="price").get_text(strip=True)
-                    price = price[:-1].replace("\xa0", "").replace(",", ".")
                 elif store == "Marimekko":
                     price = soup.find("div", class_="pdp-title-row__price product-info-price typo--heading-small "
                                                     "typo--heading-medium---l-up").get_text(strip=True)
-                    price = price[:-1].replace("\xa0", "").replace(",", ".")
+                price = price[:-1].replace("\xa0", "").replace(",", ".")
 
                 return float(price)
     except (ParsingError, AttributeError):
