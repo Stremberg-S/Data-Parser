@@ -15,7 +15,8 @@ if __name__ == "__main__":
             asyncio.run(get_all_Intel_motherboards())
             asyncio.run(get_all_i7_processors())
             asyncio.run(get_all_i9_processors())
-            asyncio.run((get_all_DDR5()))
+            asyncio.run(get_all_DDR5())
+            asyncio.run(get_all_monitors())
         except KeyboardInterrupt:
             asyncio.run(write_to_file(jimms, "\tSCRIPT STOPPED.. :("))
             break
