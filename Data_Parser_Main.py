@@ -1,6 +1,6 @@
-from Catalog import *
 from datetime import datetime
-import asyncio
+
+from Catalog import *
 
 if __name__ == "__main__":
     while True:
@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
         # Jimms:
         try:
-            asyncio.run(write_to_file(jimms, "\t-- " + TIMESTAMP + " --"))
+            asyncio.run(write_to_file(JIMMS, "\t-- " + TIMESTAMP + " --"))
 
             asyncio.run(get_all_RTX4080())
             asyncio.run(get_all_RTX4090())
@@ -18,16 +18,16 @@ if __name__ == "__main__":
             asyncio.run(get_all_DDR5())
             asyncio.run(get_all_monitors())
         except KeyboardInterrupt:
-            asyncio.run(write_to_file(jimms, "\tSCRIPT STOPPED.. :("))
+            asyncio.run(write_to_file(JIMMS, "\tSCRIPT STOPPED.. :("))
             break
 
         # Marimekko:
         try:
-            asyncio.run(write_to_file(marimekko, "\t-- " + TIMESTAMP + " --"))
+            asyncio.run(write_to_file(MARIMEKKO, "\t-- " + TIMESTAMP + " --"))
 
             asyncio.run(get_all_bags())
         except KeyboardInterrupt:
-            asyncio.run(write_to_file(marimekko, "\tSCRIPT STOPPED.. :("))
+            asyncio.run(write_to_file(MARIMEKKO, "\tSCRIPT STOPPED.. :("))
             break
 
         try:
