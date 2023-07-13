@@ -1,8 +1,8 @@
-from Data_Parser_Utils import *
-from Path import *
+from data_parser_utils import discount, fetch_html, write_to_file
+from path import ALL_STORES, JIMMS, MARIMEKKO
 
 
-async def get_price(store, url):
+async def get_price(store: str, url: str) -> float:
     """Retrieve the price of a product from a given store and URL.
 
     Args:
@@ -10,6 +10,7 @@ async def get_price(store, url):
         url (str): The URL of the product page.
     Returns:
         float: The price of the product.
+
     """
     path = ALL_STORES
     price = 0
@@ -32,11 +33,11 @@ async def get_price(store, url):
 
     except (AttributeError, ValueError):
         return await write_to_file(path, "\tCan't find the price")
-    except Exception as e:
-        return await write_to_file(path, f"\tError getting price: {e}")
+    except Exception as error:
+        return await write_to_file(path, f"\tError getting price: {error}")
 
 
-async def get_item(store, url):
+async def get_item(store: str, url: str) -> str:
     """
     Retrieves the available status of an item from the
         specified store's webpage.
@@ -46,6 +47,7 @@ async def get_item(store, url):
         url (str): The URL of the item.
     Returns:
         str: The available status of the item.
+
     """
     path = ALL_STORES
     item = ""
@@ -67,11 +69,11 @@ async def get_item(store, url):
 
     except (AttributeError, TypeError):
         return await write_to_file(path, "\tCan't find the item")
-    except Exception as e:
-        return await write_to_file(path, f"\tError getting item: {e}")
+    except Exception as error:
+        return await write_to_file(path, f"\tError getting item: {error}")
 
 
-async def get_available_status(store, url):
+async def get_available_status(store: str, url: str) -> str:
     """
     Retrieves the available status of an item from the
         specified store's webpage.
@@ -81,6 +83,7 @@ async def get_available_status(store, url):
         url (str): The URL of the item.
     Returns:
         str: The available status of the item.
+
     """
     path = ALL_STORES
     status = ""
@@ -108,11 +111,11 @@ async def get_available_status(store, url):
 
     except (AttributeError, TypeError):
         return await write_to_file(path, "\tCan't find the status")
-    except Exception as e:
-        return await write_to_file(path, f"\tError getting status: {e}")
+    except Exception as error:
+        return await write_to_file(path, f"\tError getting status: {error}")
 
 
-async def parse_data(store, wanted_price, url):
+async def parse_data(store: str, wanted_price: float, url: str) -> None:
     """
     Parses data for a given store, comparing the price of an item with
         the wanted price, and writes the item details to a file if the
@@ -124,6 +127,7 @@ async def parse_data(store, wanted_price, url):
         url (str): The URL of the item.
     Returns:
         None
+
     """
     path = ALL_STORES
     try:
@@ -137,7 +141,7 @@ async def parse_data(store, wanted_price, url):
         status = await get_available_status(store, url)
 
         if price < wanted_price:
-            x = discount(wanted_price, price)
+            percentage_change = discount(wanted_price, price)
             await write_to_file(
                 path,
                 str(item)
@@ -145,12 +149,12 @@ async def parse_data(store, wanted_price, url):
                 + str(price)
                 + " €"
                 + " | -"
-                + str(x)
+                + str(percentage_change)
                 + " %"
                 + " | "
                 + str(status),
             )
     except (AttributeError, TypeError):
         pass
-    except Exception as e:
-        return await write_to_file(path, f"\tError parsing data: {e}")
+    except Exception as error:
+        return await write_to_file(path, f"\tError parsing data: {error}")

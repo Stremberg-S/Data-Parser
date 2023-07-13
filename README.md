@@ -46,10 +46,10 @@ Handles exceptions gracefully and writes error messages to the appropriate files
 1. Configure path.py file to specify the file paths for storing the extracted data.
 
    ```python
+   # you can modify this file according to your requirements
    all_stores = "your/path/All_Stores.txt"
    jimms = "/your/path/Jimms.txt"
    marimekko = "/Users/stremberg_s/Desktop/Marimekko.txt"
-   ...
    ```
 
     2.
@@ -63,37 +63,39 @@ Handles exceptions gracefully and writes error messages to the appropriate files
                 * Below is an example of my Graphic_Cards.py file which functions I call in main:
 
                ```python
-                  from Data_Parser import *
-                  import asyncio
+                # you can modify this file according to your requirements
+                import asyncio
+
+                from Data_Parser import parse_data 
            
            
-                  async def get_all_RTX4080():
-                      tasks = [
-                          # Name of item
-                          parse_data(
+                async def get_all_RTX4080():
+                    tasks = [
+                        # Name of item
+                        parse_data(
                             "store",
                             wanted_price,
                             "url"
-                         ),
-                          # Name of item
-                          parse_data(
+                        ),
+                        # Name of item
+                        parse_data(
                             "store",
                             wanted_price,
                             "url"
-                         ),
-                          # Name of item
-                          parse_data(
+                        ),
+                        # Name of item
+                        parse_data(
                             "store",
                             wanted_price,
                             "url"
-                         )
+                        )
                       ]
                       await asyncio.gather(*tasks)
                   
                   
-                  async def get_all_RTX4090():
-                      tasks = [
-                         # Name of item
+                async def get_all_RTX4090():
+                    tasks = [
+                        # Name of item
                          parse_data(
                             "store",
                             wanted_price,
@@ -101,6 +103,7 @@ Handles exceptions gracefully and writes error messages to the appropriate files
                          )
                      ]
                      await asyncio.gather(*tasks)
+               
 
 
 3. Run the script from Data_Parser_Main.py
