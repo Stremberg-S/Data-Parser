@@ -11,35 +11,59 @@ from Catalog.Marimekko.bags import get_all_bags
 from data_parser_utils import sleep_for_10_minutes, write_to_file
 from path import JIMMS, MARIMEKKO
 
-if __name__ == "__main__":
+
+async def run_jimms_tasks():
+    """
+    Runs a series of asynchronous tasks to gather information from
+        various sources.
+
+    """
+    await write_to_file(JIMMS, f"\t-- {TIMESTAMP} --")
+    await asyncio.gather(
+        get_all_RTX4080(),
+        get_all_RTX4090(),
+        get_all_Intel_motherboards(),
+        get_all_i7_processors(),
+        get_all_i9_processors(),
+        get_all_DDR5(),
+        get_all_monitors()
+    )
+
+
+async def run_marimekko_tasks():
+    """
+    Runs a series of asynchronous tasks to gather information from
+        various sources.
+
+    """
+    await write_to_file(MARIMEKKO, f"\t-- {TIMESTAMP} --")
+    await get_all_bags()
+
+
+async def main():
+    """
+    Main entry point for running the script that performs periodic tasks.
+
+    """
     while True:
-        TIMESTAMP = datetime.now().strftime("%d.%m.%Y %H:%M")
-
-        # Jimms:
         try:
-            asyncio.run(write_to_file(JIMMS, "\t-- " + TIMESTAMP + " --"))
-
-            asyncio.run(get_all_RTX4080())
-            asyncio.run(get_all_RTX4090())
-            asyncio.run(get_all_Intel_motherboards())
-            asyncio.run(get_all_i7_processors())
-            asyncio.run(get_all_i9_processors())
-            asyncio.run(get_all_DDR5())
-            asyncio.run(get_all_monitors())
+            await run_jimms_tasks()
         except KeyboardInterrupt:
-            asyncio.run(write_to_file(JIMMS, "\tSCRIPT STOPPED.. :("))
-            break
-
-        # Marimekko:
-        try:
-            asyncio.run(write_to_file(MARIMEKKO, "\t-- " + TIMESTAMP + " --"))
-
-            asyncio.run(get_all_bags())
-        except KeyboardInterrupt:
-            asyncio.run(write_to_file(MARIMEKKO, "\tSCRIPT STOPPED.. :("))
+            await write_to_file(JIMMS, "\tSCRIPT STOPPED.. :(")
             break
 
         try:
-            asyncio.run(sleep_for_10_minutes())
+            await run_marimekko_tasks()
+        except KeyboardInterrupt:
+            await write_to_file(MARIMEKKO, "\tSCRIPT STOPPED.. :(")
+            break
+
+        try:
+            await sleep_for_10_minutes()
         except KeyboardInterrupt:
             break
+
+
+if __name__ == "__main__":
+    TIMESTAMP = datetime.now().strftime("%d.%m.%Y %H:%M")
+    asyncio.run(main())
