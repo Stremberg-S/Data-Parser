@@ -11,8 +11,6 @@ from Catalog.Marimekko.bags import get_all_bags
 from data_parser_utils import sleep_for_10_minutes, write_to_file
 from path import JIMMS, MARIMEKKO
 
-TIMESTAMP = datetime.now().strftime("%d.%m.%Y %H:%M")
-
 
 async def run_jimms_tasks():
     """
@@ -20,7 +18,6 @@ async def run_jimms_tasks():
         various sources.
 
     """
-    await write_to_file(JIMMS, f"\t-- {TIMESTAMP} --")
     await asyncio.gather(
         get_all_RTX4080(),
         get_all_RTX4090(),
@@ -38,8 +35,9 @@ async def run_marimekko_tasks():
         various sources.
 
     """
-    await write_to_file(MARIMEKKO, f"\t-- {TIMESTAMP} --")
-    await get_all_bags()
+    await asyncio.gather(
+        get_all_bags()
+    )
 
 
 async def main():
@@ -48,21 +46,19 @@ async def main():
 
     """
     while True:
-        try:
-            await run_jimms_tasks()
-        except KeyboardInterrupt:
-            await write_to_file(JIMMS, "\tSCRIPT STOPPED.. :(")
-            break
+        timestamp = datetime.now().strftime("%d.%m.%Y %H:%M")
 
         try:
+            await write_to_file(JIMMS, f"\t-- {timestamp} --")
+            await run_jimms_tasks()
+
+            await write_to_file(MARIMEKKO, f"\t-- {timestamp} --")
             await run_marimekko_tasks()
+
+            await sleep_for_10_minutes()
+
         except KeyboardInterrupt:
             await write_to_file(MARIMEKKO, "\tSCRIPT STOPPED.. :(")
-            break
-
-        try:
-            await sleep_for_10_minutes()
-        except KeyboardInterrupt:
             break
 
 
