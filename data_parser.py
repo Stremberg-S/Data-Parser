@@ -15,7 +15,7 @@ async def get_price(store: str, url: str) -> float:
     """
     path: str = get_correct_path(store)
     price: str = '0'
-    
+
     try:
         soup = await fetch_html(url)
 
@@ -95,7 +95,7 @@ async def get_available_status(store: str, url: str) -> str:
 
         if path == JIMMS:
             status_element = soup.find(
-                "span", class_="availability-text d-flex align-items-center gap-1"
+                "span", class_="availability-text d-flex align-items-start column-gap-1"
             )
             if status_element is not None:
                 status = status_element.get_text(strip=True).replace(
