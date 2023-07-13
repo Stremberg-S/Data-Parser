@@ -21,8 +21,11 @@ async def get_price(store, url):
             price = soup.find("span", itemprop="price").get_text(strip=True)
         elif store == "Marimekko":
             path = MARIMEKKO
-            price = soup.find("div", class_="pdp-title-row__price product-info-price typo--heading-small "
-                                            "typo--heading-medium---l-up").get_text(strip=True)
+            price = soup.find(
+                "div",
+                class_="pdp-title-row__price product-info-price typo--heading-small "
+                       "typo--heading-medium---l-up",
+            ).get_text(strip=True)
         price = price[:-1].replace("\xa0", "").replace(",", ".")
 
         return float(price)
@@ -35,7 +38,8 @@ async def get_price(store, url):
 
 async def get_item(store, url):
     """
-    Retrieves the available status of an item from the specified store's webpage.
+    Retrieves the available status of an item from the
+        specified store's webpage.
 
     Args:
         store (str): The name of the store.
@@ -50,10 +54,14 @@ async def get_item(store, url):
 
         if store == "Jimms":
             path = JIMMS
-            item = soup.find("h1", class_="text-normal fs-3 my-0").get_text(strip=True)
+            item = soup.find(
+                "h1", class_="text-normal fs-3 my-0"
+            ).get_text(strip=True)
         elif store == "Marimekko":
             path = MARIMEKKO
-            item = soup.find("a", href=url).get_text(strip=True)
+            item = soup.find(
+                "a", href=url
+            ).get_text(strip=True)
 
         return item
 
@@ -65,7 +73,8 @@ async def get_item(store, url):
 
 async def get_available_status(store, url):
     """
-    Retrieves the available status of an item from the specified store's webpage.
+    Retrieves the available status of an item from the
+        specified store's webpage.
 
     Args:
         store (str): The name of the store.
@@ -80,12 +89,18 @@ async def get_available_status(store, url):
 
         if store == "Jimms":
             path = JIMMS
-            status_element = soup.find("span", class_="availability-text d-flex align-items-center gap-1")
+            status_element = soup.find(
+                "span", class_="availability-text d-flex align-items-center gap-1"
+            )
             if status_element is not None:
-                status = status_element.get_text(strip=True).replace("fiber_manual_record", "")
+                status = status_element.get_text(strip=True).replace(
+                    "fiber_manual_record", ""
+                )
         elif store == "Marimekko":
             path = MARIMEKKO
-            status_element = soup.find("ul", {"class": "pdp__delivery-list typo--body-small"}).find_all('li')[1]
+            status_element = soup.find(
+                "ul", {"class": "pdp__delivery-list typo--body-small"}
+            ).find_all("li")[1]
             if status_element is not None:
                 status = status_element.get_text(strip=True)
 
@@ -99,8 +114,9 @@ async def get_available_status(store, url):
 
 async def parse_data(store, wanted_price, url):
     """
-    Parses data for a given store, comparing the price of an item with the wanted price,
-    and writes the item details to a file if the price is lower than the wanted price.
+    Parses data for a given store, comparing the price of an item with
+        the wanted price, and writes the item details to a file if the
+        price is lower than the wanted price.
 
     Args:
         store (str): The name of the store.
@@ -122,11 +138,18 @@ async def parse_data(store, wanted_price, url):
 
         if price < wanted_price:
             x = discount(wanted_price, price)
-            await write_to_file(path,
-                                str(item) + "\t | " +
-                                str(price) + " €" +
-                                " | -" + str(x) + " %" +
-                                " | " + str(status))
+            await write_to_file(
+                path,
+                str(item)
+                + "\t | "
+                + str(price)
+                + " €"
+                + " | -"
+                + str(x)
+                + " %"
+                + " | "
+                + str(status),
+            )
     except (AttributeError, TypeError):
         pass
     except Exception as e:

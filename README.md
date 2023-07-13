@@ -23,19 +23,19 @@ Handles exceptions gracefully and writes error messages to the appropriate files
 
 1. Clone the project repository from GitHub:
 
-   ```
+   ```bash
    git clone https://github.com/Stremberg-S/Data-Parser.git
    ```
 
 2. Change to the project directory:
 
-   ```
+   ```bash
    cd Data-Parser
    ```
 
 3. Install the required dependencies using pip:
 
-   ```
+   ```bash
    pip install -r requirements.txt
    ```
 
@@ -45,47 +45,63 @@ Handles exceptions gracefully and writes error messages to the appropriate files
 
 1. Configure path.py file to specify the file paths for storing the extracted data.
 
-   ```
+   ```python
    all_stores = "your/path/All_Stores.txt"
    jimms = "/your/path/Jimms.txt"
    marimekko = "/Users/stremberg_s/Desktop/Marimekko.txt"
    ...
    ```
 
-2.
-    * Customize the get_all_*() functions in the file to retrieve the desired data from the online catalogs. You can add
-      or
-      modify these functions according to your requirements.
+    2.
+        * Customize the get_all_*() functions in the file to retrieve the desired data from the online catalogs. You can
+          add
+          or
+          modify these functions according to your requirements.
 
-    * For this you'll need to make catalog-directory, where is located files for all stores you need
+            * For this you'll need to make catalog-directory, where is located files for all stores you need
 
-    * Below is an example of my Graphic_Cards.py file which functions I call in main:
+                * Below is an example of my Graphic_Cards.py file which functions I call in main:
 
-      ```
-      from Data_Parser import *
-      import asyncio
-      
-      
-      async def get_all_RTX4080():
-          tasks = [
-              # Name of item
-              parse_data("store", wanted_price, "url"),
-              # Name of item
-              parse_data("store", wanted_price, "url"),
-              # Name of item
-              parse_data("store", wanted_price, "url")
-          ]
-          await asyncio.gather(*tasks)
-      
-      
-      async def get_all_RTX4090():
-          tasks = [
-              # Name of item
-              parse_data("store", wanted_price, "url")
-          ]
-          await asyncio.gather(*tasks)
-      
-      ```
+               ```python
+                  from Data_Parser import *
+                  import asyncio
+           
+           
+                  async def get_all_RTX4080():
+                      tasks = [
+                          # Name of item
+                          parse_data(
+                            "store",
+                            wanted_price,
+                            "url"
+                         ),
+                          # Name of item
+                          parse_data(
+                            "store",
+                            wanted_price,
+                            "url"
+                         ),
+                          # Name of item
+                          parse_data(
+                            "store",
+                            wanted_price,
+                            "url"
+                         )
+                      ]
+                      await asyncio.gather(*tasks)
+                  
+                  
+                  async def get_all_RTX4090():
+                      tasks = [
+                         # Name of item
+                         parse_data(
+                            "store",
+                            wanted_price,
+                            "url"
+                         )
+                     ]
+                     await asyncio.gather(*tasks)
+
 
 3. Run the script from Data_Parser_Main.py
 4. The script will start retrieving and parsing data from the specified online stores. The extracted information will be

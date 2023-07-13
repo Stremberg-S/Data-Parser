@@ -38,12 +38,14 @@ def discount(old, new):
 
 async def fetch_html(url):
     """
-    Fetches the HTML content of a webpage using an asynchronous HTTP client session.
+    Fetches the HTML content of a webpage using an asynchronous
+        HTTP client session.
 
     Args:
         url (str): The URL of the webpage.
     Returns:
-        BeautifulSoup: The BeautifulSoup object representing the parsed HTML content.
+        BeautifulSoup: The BeautifulSoup object representing the parsed
+            HTML content.
     """
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
