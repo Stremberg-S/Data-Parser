@@ -4,6 +4,8 @@ import aiofiles
 import aiohttp
 from bs4 import BeautifulSoup
 
+from path import ALL_STORES, JIMMS, MARIMEKKO
+
 
 # FILE OPERATIONS
 def read_file(path: str) -> str:
@@ -82,3 +84,22 @@ async def sleep_for_10_minutes():
 
     """
     await asyncio.sleep(600)
+
+
+def get_correct_path(store: str) -> str:
+    """Choose the appropriate path based on the given store name.
+
+    Args:
+        store (str): The name of the store.
+    Returns:
+        str: The corresponding path for the store.
+
+    """
+    store = store.lower()
+
+    if store == "jimms":
+        return JIMMS
+    elif store == "marimekko":
+        return MARIMEKKO
+    else:
+        return ALL_STORES

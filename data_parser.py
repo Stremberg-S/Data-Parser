@@ -1,5 +1,6 @@
-from data_parser_utils import discount, fetch_html, write_to_file
-from path import ALL_STORES, JIMMS, MARIMEKKO
+from data_parser_utils import (discount, fetch_html, get_correct_path,
+                               write_to_file)
+from path import JIMMS, MARIMEKKO
 
 
 async def get_price(store: str, url: str) -> float:
@@ -12,21 +13,22 @@ async def get_price(store: str, url: str) -> float:
         float: The price of the product.
 
     """
-    path = ALL_STORES
-    price = 0
+    path: str = get_correct_path(store)
+    price: str = '0'
+    
     try:
         soup = await fetch_html(url)
 
-        if store == "Jimms":
-            path = JIMMS
+        if path == JIMMS:
             price = soup.find("span", itemprop="price").get_text(strip=True)
-        elif store == "Marimekko":
-            path = MARIMEKKO
+
+        elif path == MARIMEKKO:
             price = soup.find(
                 "div",
                 class_="pdp-title-row__price product-info-price typo--heading-small "
                        "typo--heading-medium---l-up",
             ).get_text(strip=True)
+
         price = price[:-1].replace("\xa0", "").replace(",", ".")
 
         return float(price)
@@ -49,18 +51,18 @@ async def get_item(store: str, url: str) -> str:
         str: The available status of the item.
 
     """
-    path = ALL_STORES
-    item = ""
+    path: str = get_correct_path(store)
+    item: str = ""
+
     try:
         soup = await fetch_html(url)
 
-        if store == "Jimms":
-            path = JIMMS
+        if path == JIMMS:
             item = soup.find(
                 "h1", class_="text-normal fs-3 my-0"
             ).get_text(strip=True)
-        elif store == "Marimekko":
-            path = MARIMEKKO
+
+        elif path == MARIMEKKO:
             item = soup.find(
                 "a", href=url
             ).get_text(strip=True)
@@ -85,13 +87,13 @@ async def get_available_status(store: str, url: str) -> str:
         str: The available status of the item.
 
     """
-    path = ALL_STORES
-    status = ""
+    path: str = get_correct_path(store)
+    status: str = "unknown status"
+
     try:
         soup = await fetch_html(url)
 
-        if store == "Jimms":
-            path = JIMMS
+        if path == JIMMS:
             status_element = soup.find(
                 "span", class_="availability-text d-flex align-items-center gap-1"
             )
@@ -99,8 +101,8 @@ async def get_available_status(store: str, url: str) -> str:
                 status = status_element.get_text(strip=True).replace(
                     "fiber_manual_record", ""
                 )
-        elif store == "Marimekko":
-            path = MARIMEKKO
+
+        elif path == MARIMEKKO:
             status_element = soup.find(
                 "ul", {"class": "pdp__delivery-list typo--body-small"}
             ).find_all("li")[1]
@@ -129,31 +131,18 @@ async def parse_data(store: str, wanted_price: float, url: str) -> None:
         None
 
     """
-    path = ALL_STORES
-    try:
-        if store == "Jimms":
-            path = JIMMS
-        elif store == "Marimekko":
-            path = MARIMEKKO
+    path: str = get_correct_path(store)
 
+    try:
         price = await get_price(store, url)
         item = await get_item(store, url)
         status = await get_available_status(store, url)
 
         if price < wanted_price:
             percentage_change = discount(wanted_price, price)
-            await write_to_file(
-                path,
-                str(item)
-                + "\t | "
-                + str(price)
-                + " €"
-                + " | -"
-                + str(percentage_change)
-                + " %"
-                + " | "
-                + str(status),
-            )
+            content = f"{item} | {price} € | -{percentage_change} % | {status}"
+            await write_to_file(path, content)
+
     except (AttributeError, TypeError):
         pass
     except Exception as error:
