@@ -11,6 +11,8 @@ from Catalog.Marimekko.bags import get_all_bags
 from data_parser_utils import sleep_for_10_minutes, write_to_file
 from path import JIMMS, MARIMEKKO
 
+TIMESTAMP = datetime.now().strftime("%d.%m.%Y %H:%M")
+
 
 async def run_jimms_tasks():
     """
@@ -65,5 +67,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    TIMESTAMP = datetime.now().strftime("%d.%m.%Y %H:%M")
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass
